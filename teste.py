@@ -1,7 +1,10 @@
 #CADASTRO DO CLIENTE
+
+print("Iniciando cadastro na concessioária.")
+
 cliente = {
 
-"nome": input("Digite o seu nome para iniciar o cadastro na nossa concessioária: "),
+"nome": input("Digite o seu nome: "),
 "telefone": input("Digite o seu telefone: "),
 "saldo": float(input("Digite o seu saldo inicial: ")),
 
@@ -15,9 +18,7 @@ tabela_precos = {
 "Sennna": 3000000.0,
 }
 
-#Lista de dicionarios. Com valores atribuidos a objetos.
-# ":" atrela um rotulo nos modelos.
-#rotulos "marca" e "modelo". valores
+#lista de tuplas
 carros_aluguel = [
 ("Ferrari", "F40"),
 ("Mclaren", "Senna"),
@@ -25,8 +26,8 @@ carros_aluguel = [
 
 carros_vendas = [
 ("Ferrari", "F40"),
-("Porche Panamera","Bmw X6")
-("Bmw","X6")
+("Porche","Panamera"),
+("Bmw","X6"),
 ("Mclaren","Senna")
 
 ]
@@ -35,15 +36,20 @@ carros_vendas = [
 def vender_carro():
     print("--- VENDA DE VEÍCULOS ---")
     
-    marca = input;("Digite a marca que você deseja")
-    modelo = input("Digite o modelo da marca que você escolheu")
+    marca = input("Digite a marca que você deseja: ").lower()
+    if marca not in carros_vendas:
+          print("A marca não esta presente em nossa lista")
+          return
+
+    modelo = input("Digite o modelo da marca que você escolheu: ").lower()
+
+    if modelo not in carros_vendas:
+        print("O modelo não esta presente em nossa lista")
     
-    if marca not in tabela_precos:
-        print("A marca não esta presente em nossa lista")
-        return
+    escolha = modelo
     
-    valor_referencia = tabela_precos[modelo]
-    proposta = valor_referencia*0.80 #paga 20% a menos do valor de referência
+    valor_referencia = tabela_precos[escolha]
+    proposta = valor_referencia*0.80 #paga 20 a menos do valor de referência
     
     print(f"Valor referencial: {valor_referencia:.2f}")
     print(f"Prosposta da concessionaria: {proposta:.2f}")
@@ -68,17 +74,16 @@ def alugar_carro():
         return
     
     print("\n--- Veículos Disponíveis ---")
-    for carro in carros_aluguel:
-     marca = carro["marca"]
-     modelo = carro["modelo"]
-     print(f"- Marca: {marca}\n- Modelo: {modelo}")
+    print("\ncarros disponíveis:")
+    for i, carro in enumerate(carros_aluguel):
+     print(f"{i + 1} - {carro[0]} ({carro[1]})")
     
     escolha = int(input("Escolha o numero correspondente ao carrro do seu interrese: ")) -1 
     
     if escolha < 0 or escolha >= len(carros_aluguel):
         print("Opção invalida.")
     
-    dias = int(input("Quantos dias você gostaria de alugar o carro?"))
+    dias = int(input("Quantos dias você gostaria de alugar o carro? "))
     
     valor_final = dias*5
 
@@ -90,10 +95,10 @@ def alugar_carro():
         print("Valor insuficiente. Tente buscar outro modelo ou diminuir a quantidade dias.")
         return
     
-    confimarcao = input("Saldo suficientel, gostaria de alugar o Automóvel: (s) ou (n)")
+    confimarcao = input("Saldo suficientel, gostaria de alugar o Automóvel: (s) ou (n): ")
     if confimarcao == "s":
         cliente["saldo"] -= valor_final
-        print("Transação concluida. Você escolheu: {carro[escolha]}")
+        print(f"Transação concluida. Você escolheu: {carro[escolha]}")
         carro = carros_aluguel.pop(escolha)#O pop é a ação de remover o item com a ação de obter o item em uma única linha.
     else:
         print("Transação cancelada.")
@@ -104,21 +109,37 @@ def comprar_carro():
     print("--- COMPRAR DE VEÍCULOS ---")
     print("Automóveis disponiveis.")
 
-    for carro in carros_vendas:
-        marca = carros_vendas["marca"]
-        modelo = carros_vendas["modelo"]
-        print(f"Marca - {marca}\n Modelo - {modelo}")    
+    for i, carro in enumerate(carros_vendas):
+     print(f"{i + 1} - {carro[0]} ({carro[1]})")
+    
+    escolha = int(input("Digite o numero do veículo de seu interrese: ")) - 1
+    
+    if escolha < 0 or escolha >= len(carros_vendas):
+        print("Opção invalida.")
+        return
+    
+    nome_carro = carros_vendas[escolha][0]
+    print(f"O carro escolhido foi: {nome_carro}")
 
 
+    preco_base = tabela_precos[nome_carro]# O sistema consulta o valor FIPE 
+    valor_proposta = preco_base*1.15 # adiciona 15% de acréscimo.
 
+    aceita_compra = input(f"A valor do veículo é: {valor_proposta}. Gostaria de finalizar a compra? (s)/(n): ")
 
-
-
-
-
-
-
-
+    if aceita_compra == "s":
+        print("Verificando o seu saldo...")
+        
+        if cliente["saldo"] < valor_proposta:
+            print("Saldo insuficiente.")
+            return
+        else:
+         print("Saldo Suficiente, compra realizada com sucesso.")
+         return
+    else:
+        print("Compra canceladada.")
+        return
+    
 #Menu Principal
 def menu():
     print("--- SEJA BEM VINDO, A NOSSA CONCESSIONARIA. ---")
@@ -147,3 +168,5 @@ while True:
             break
         case _:
             print("Opção invalida. Tente novamente.")
+
+
