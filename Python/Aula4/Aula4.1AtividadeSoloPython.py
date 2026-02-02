@@ -1,12 +1,14 @@
 user = "HeryPrata"
+senha = 1234
+
 tentativaUser = input("Digite o seu user: ")
 
 if user == "HeryPrata":
-    print("Senha correta")
+    print("Usuario correto")
 else:
     print("Usuario incorreto")
 
-senha = 1234
+
 tentativaSenha = int(input("Digite sua senha: "))
 
 if tentativaSenha == 1234:
@@ -17,5 +19,6 @@ if tentativaSenha == 1234:
         print("Bem Vindo, usuário!")
 else:
     print("Usuário ou senha incorretos.")
+
 
 
